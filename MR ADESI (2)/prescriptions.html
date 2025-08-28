@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Manage your prescriptions at HealthHub Pharmacy - Refill, upload, or explore e-prescription options.">
+    <title>Prescriptions - HealthHub Pharmacy</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation Bar (Same as Homepage/Products) -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html"><img src="logo.png" alt="HealthHub Pharmacy Logo" height="40"></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item"><a class="nav-link" href="index.html#home">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="products.html">Products</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="prescriptions.html">Prescriptions</a></li>
+                    <li class="nav-item"><a class="nav-link" href="services.html">Services</a></li>
+                    <li class="nav-item"><a class="nav-link" href="blog.html">Blog</a></li>
+                    <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+                    
+                </ul>
+                <form class="d-flex">
+                    <input class="form-control me-2" type="search" placeholder="Search Drugs" aria-label="Search">
+                    <button class="btn btn-outline-primary" type="submit"><i class="fas fa-search"></i></button>
+                </form>
+                <a href="#cart" class="ms-3 position-relative" data-bs-toggle="modal" data-bs-target="#cartModal">
+    <i class="fas fa-shopping-cart fa-lg"></i>
+    <span id="cartCount" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">0</span>
+</a>
+                <a href="#login" class="ms-3"><i class="fas fa-user fa-lg"></i></a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Prescriptions Section -->
+    <section id="prescriptions" class="py-5">
+        <div class="container py-5">
+            <h1 class="text-center mb-4">Manage Your Prescriptions</h1>
+            <p class="text-center mb-5">Securely refill, upload, or track your prescriptions with ease. HIPAA-compliant and encrypted.</p>
+
+            <!-- Refill Form -->
+            <div class="row mb-5">
+                <div class="col-md-6 mx-auto">
+                    <div class="card">
+                        <div class="card-body">
+                            <h3 class="card-title text-center mb-4">Refill Your Prescription</h3>
+                            <form id="refillForm">
+                                <div class="mb-3">
+                                    <label for="rxNumber" class="form-label">Prescription Number</label>
+                                    <input type="text" class="form-control" id="rxNumber" placeholder="e.g., RX123456" required aria-describedby="rxNumberHelp">
+                                    <div id="rxNumberHelp" class="form-text">Find this on your prescription label.</div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="patientName" class="form-label">Patient Name</label>
+                                    <input type="text" class="form-control" id="patientName" placeholder="Full Name" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="patientDOB" class="form-label">Date of Birth</label>
+                                    <input type="date" class="form-control" id="patientDOB" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="deliveryOption" class="form-label">Delivery Option</label>
+                                    <select class="form-select" id="deliveryOption" aria-label="Delivery option">
+                                        <option value="pickup">In-Store Pickup</option>
+                                        <option value="delivery">Home Delivery</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="prescriptionFile" class="form-label">Upload Prescription (Optional)</label>
+                                    <input type="file" class="form-control" id="prescriptionFile" accept=".pdf,.jpg,.png">
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100">Submit Refill</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- User Dashboard (Hidden unless logged in) -->
+            <div class="row mb-5" id="userDashboard" style="display: none;">
+                <div class="col-12">
+                    <h3 class="text-center mb-4">Your Prescription Dashboard</h3>
+                    <div class="card">
+                        <div class="card-body">
+                            <h5>Prescription History</h5>
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Rx Number</th>
+                                        <th>Medication</th>
+                                        <th>Status</th>
+                                        <th>Refill Date</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="prescriptionTable">
+                                    <!-- Populated by JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- E-Prescription Info -->
+            <div class="row">
+                <div class="col-md-8 mx-auto text-center">
+                    <h3>E-Prescriptions & Telemedicine</h3>
+                    <p>Connect with your doctor for electronic prescriptions or book a telemedicine consultation with our pharmacists.</p>
+                    <a href="#telemedicine" class="btn btn-success">Book a Consultation</a>
+                    <p class="mt-3"><i class="fas fa-lock me-2"></i> All data is encrypted and HIPAA compliant.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Confirmation Modal -->
+    <div class="modal fade" id="refillModal" tabindex="-1" aria-labelledby="refillModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="refillModalLabel">Refill Submitted</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Your prescription refill request has been received. We'll notify you once it's ready!</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+<!-- Cart Modal -->
+<div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="cartModalLabel">Your Cart</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="cartItems">
+                    <!-- Populated by JavaScript -->
+                </div>
+                <p id="cartEmpty" class="text-center">Your cart is empty.</p>
+                <p class="text-end fw-bold" id="cartTotal">Total: $0.00</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Continue Shopping</button>
+                <a href="#checkout" class="btn btn-primary">Proceed to Checkout</a>
+            </div>
+        </div>
+    </div>
+</div>
+    <!-- Footer (Same as Homepage/Products) -->
+    <footer class="bg-dark text-white py-4">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <h5>Contact Us</h5>
+                <p>
+                    123 Health St, City, Country<br>
+                    <a href="mailto:healthhubpharmacy@gmail.com" class="text-white">Email: healthhubpharmacy@gmail.com</a><br>
+                    <a href="tel:+11234567890" class="text-white">Phone: +1-123-456-7890</a>
+                </p>
+            </div>
+            <div class="col-md-4">
+                <h5>Quick Links</h5>
+                <ul class="list-unstyled">
+                    <li><a href="products.html" class="text-white">Products</a></li>
+                    <li><a href="prescriptions.html" class="text-white">Prescriptions</a></li>
+                    <li><a href="services.html" class="text-white">Services</a></li>
+                    <li><a href="blog.html" class="text-white">Blog</a></li>
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <h5>Follow Us</h5>
+                <a href="https://facebook.com/healthhubpharmacy" class="text-white me-2" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                <a href="https://twitter.com/healthhubpharm" class="text-white me-2" target="_blank"><i class="fab fa-twitter"></i></a>
+                <a href="https://instagram.com/healthhubpharmacy" class="text-white" target="_blank"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+        <div class="text-center mt-3">
+            <p>&copy; 2025 HealthHub Pharmacy. All rights reserved. <a href="privacy.html" class="text-white">Privacy Policy</a></p>
+        </div>
+    </div>
+</footer>
+    <!-- Bootstrap JS and Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
+    <!-- Custom JS -->
+    <script src="scripts.js"></script>
+</body>
+</html>
